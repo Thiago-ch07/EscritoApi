@@ -33,4 +33,14 @@ class personaController extends Controller
         ];
         return response()->json($response);
     }
+
+    public function update (Request $request)
+    {
+        $persona = personas::find($request->id);
+        $persona->nombre = $request->nombre;
+        $persona->apellido = $request->apellido;
+        $persona->telefono = $request->telefono;
+        $response = $persona->save();
+        return response()->json($response);
+    }
 }
