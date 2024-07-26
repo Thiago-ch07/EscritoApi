@@ -44,6 +44,7 @@ class personaController extends Controller
     {
         $personas = personas::all();
         return response()->json(['personas' => $personas]);
+        return view('personas.index', ['personas' => $personas]);
     }
 
     public function update (Request $request)
