@@ -14,7 +14,8 @@ class personaController extends Controller
             'apellido' => $request->apellido,
             'telefono' => $request->telefono,
         ]);
-        return response()->json($persona);
+        $response = $persona->save();
+        return response()->json($response);
     }
 
     public function delete (Request $request)
@@ -22,5 +23,14 @@ class personaController extends Controller
         $persona = personas::find($request->id);
         $persona->delete();
         return response()->json(['message' => 'Persona eliminada correctamente']);
+    }
+
+    public function index (Request $request)
+    {
+        $personas = personas::all();
+        $response =  [
+            'personas' => $personas
+        ];
+        return response()->json($response);
     }
 }
