@@ -14,13 +14,17 @@ class personaController extends Controller
             'apellido' => $request->apellido,
             'telefono' => $request->telefono,
         ]);
-        $response = $persona->save();
-        return response()->json($response);
+
+        return response()->json($persona);
     }
 
     public function delete (Request $request)
     {
         $persona = personas::find($request->id);
+        if (!$persona) {
+            return response()->json(['message' => 'Persona no encontrada'], 404);
+        }
+
         $persona->delete();
         return response()->json(['message' => 'Persona eliminada correctamente']);
     }
@@ -28,10 +32,7 @@ class personaController extends Controller
     public function index (Request $request)
     {
         $personas = personas::all();
-        $response =  [
-            'personas' => $personas
-        ];
-        return response()->json($response);
+        return response()->json(['personas' => $personas]);
     }
 
     public function update (Request $request)
@@ -42,5 +43,11 @@ class personaController extends Controller
         $persona->telefono = $request->telefono;
         $response = $persona->save();
         return response()->json($response);
+    }
+
+    public function search (Request $request)
+    {
+        $personas = personas::where('nombre', 'like', '%'.$request->busqueda.'%')->orWhere('apellido', 'like', '%'.$request->busqueda.'%')->get();
+        return response()->json(['personas' => $personas]);
     }
 }
